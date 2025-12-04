@@ -1,0 +1,11 @@
+node_modules
+__pycache__
+*.pyc
+.env
+client_secret.json
+client_secret_*.json
+error.log
+.DS_Store
+*.log
+dist
+.vite
