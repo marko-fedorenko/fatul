@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+import { useNavigate } from 'react-router-dom';
+
 const UrlAnalysis = () => {
+    const navigate = useNavigate();
     const [sites, setSites] = useState([]);
     const [selectedSite, setSelectedSite] = useState('');
     const [urls, setUrls] = useState([]);
@@ -34,7 +37,7 @@ const UrlAnalysis = () => {
 
     const fetchSites = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/sites', { withCredentials: true });
+            const response = await axios.get('/api/sites', { withCredentials: true });
             setSites(response.data);
             if (response.data.length > 0) {
                 setSelectedSite(response.data[0].siteUrl);
@@ -42,7 +45,7 @@ const UrlAnalysis = () => {
         } catch (err) {
             console.error(err);
             if (err.response && err.response.status === 401) {
-                window.location.href = '/';
+                navigate('/');
             }
             setError('Failed to fetch sites');
         }
@@ -51,7 +54,7 @@ const UrlAnalysis = () => {
     const fetchUrls = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8000/api/urls', {
+            const response = await axios.get('/api/urls', {
                 params: {
                     site_url: selectedSite,
                     page_filter: urlFilter || undefined
@@ -70,7 +73,7 @@ const UrlAnalysis = () => {
 
     const fetchUrlTimeSeries = async (url) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/url-timeseries', {
+            const response = await axios.get('/api/url-timeseries', {
                 params: {
                     site_url: selectedSite,
                     page_url: url
@@ -107,10 +110,10 @@ const UrlAnalysis = () => {
             <div className="header">
                 <h1>URL Analysis</h1>
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button className="btn-primary" onClick={() => window.location.href = '/dashboard'}>
+                    <button className="btn-primary" onClick={() => navigate('/dashboard')}>
                         Back to Dashboard
                     </button>
-                    <button className="btn-primary" onClick={() => window.location.href = '/'}>
+                    <button className="btn-primary" onClick={() => navigate('/')}>
                         Logout
                     </button>
                 </div>

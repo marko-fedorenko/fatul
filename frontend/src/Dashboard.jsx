@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+import { useNavigate } from 'react-router-dom';
+
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [sites, setSites] = useState([]);
     const [selectedSite, setSelectedSite] = useState('');
     const [data, setData] = useState([]);
@@ -32,7 +35,7 @@ const Dashboard = () => {
 
     const fetchSites = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/sites', { withCredentials: true });
+            const response = await axios.get('/api/sites', { withCredentials: true });
             setSites(response.data);
             if (response.data.length > 0) {
                 setSelectedSite(response.data[0].siteUrl);
@@ -40,7 +43,7 @@ const Dashboard = () => {
         } catch (err) {
             console.error(err);
             if (err.response && err.response.status === 401) {
-                window.location.href = '/';
+                navigate('/');
             }
             setError('Failed to fetch sites');
         }
@@ -49,7 +52,7 @@ const Dashboard = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8000/api/data', {
+            const response = await axios.get('/api/data', {
                 params: {
                     site_url: selectedSite,
                     page_filter: filter
@@ -88,11 +91,11 @@ const Dashboard = () => {
             <div className="header">
                 <h1>GSC Fresh Analytics</h1>
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button className="btn-primary" onClick={() => window.location.href = '/url-analysis'}>
+                    <button className="btn-primary" onClick={() => navigate('/url-analysis')}>
                         URL Analysis
                     </button>
                     <button className="btn-primary" onClick={() => {
-                        window.location.href = '/';
+                        navigate('/');
                     }}>Logout</button>
                 </div>
             </div>

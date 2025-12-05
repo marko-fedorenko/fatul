@@ -1,13 +1,7 @@
 node_modules
-**/node_modules
-
-__pycache__
-*.pyc
 .env
-client_secret.json
-client_secret_*.json
-error.log
-.DS_Store
-*.log
+client_secret*.json
 dist
-.vite
+.DS_Store
+coverage
+.vscode
